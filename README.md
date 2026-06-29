@@ -4,15 +4,27 @@ Sync the **Claude Desktop app's** Claude Code sessions across multiple Windows P
 
 Sessions live in `%APPDATA%\Claude\claude-code-sessions`. This repo sets up a Syncthing mesh so every PC holds the same sessions, syncing automatically in the background.
 
-## Add a new PC (one command)
+## Provision a brand-new PC (skills + sessions, one command)
 
-In PowerShell on the new machine:
+**Prerequisite (one time, manual):** install OneDrive on the new PC, sign in as `champ_dtm@hotmail.com`, and let it sync until `C:\Users\<you>\OneDrive\.claude` exists locally.
+
+Then, in PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/champdtm/claude-session-sync/main/provision.ps1 | iex
+```
+
+This does **both**:
+- **Skills/settings/memory** — junctions `~/.claude` to `OneDrive\.claude` (backs up any existing local `~/.claude` first).
+- **Sessions** — restores the sessions folder, installs + starts Syncthing, adds the hub as an introducer, shares the folder, and auto-starts at logon.
+
+It prints the new PC's **Device ID**. Restart the Claude Desktop app afterward.
+
+### Sessions only (skills already set up)
 
 ```powershell
 irm https://raw.githubusercontent.com/champdtm/claude-session-sync/main/setup-claude-sync.ps1 | iex
 ```
-
-It backs your sessions up to the Desktop first (lossless), restores the folder as a real folder, installs + starts Syncthing, adds the **hub** PC as an introducer, shares the `claude-code-sessions` folder, and sets Syncthing to auto-start at logon. It prints the new PC's **Device ID**.
 
 ## Finish pairing
 
